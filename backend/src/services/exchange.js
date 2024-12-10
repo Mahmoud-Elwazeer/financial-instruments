@@ -3,7 +3,7 @@ import Exchange from '../models/exchange.js';
 
 export const getAll = async(req) => {
      // Get query parameters for pagination
-    const { type, currency, page = 1, limit = 10 } = req.query;
+    const { type, country, currency, page = 1, limit = 10 } = req.query;
 
     // Calculate the number of documents to skip (pagination logic)
     const skip = (page - 1) * limit;
@@ -12,6 +12,7 @@ export const getAll = async(req) => {
     const query = {};
     if (type) query.type = type;
     if (currency) query.currency = currency;
+    if (currency) query.country = country;
 
     // Fetch exchanges with pagination
     const exchanges = await Exchange.find(query)

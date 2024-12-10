@@ -4,6 +4,7 @@ import helmet from "helmet";
 import { handleRoutes } from './routes/index.js'
 import { globalError } from './middlewares/errorMiddleware.js';
 import dbConnection from './configurations/database.js'
+import cors from 'cors'
 
 // env
 const PORT = process.env.PORT || 3000;
@@ -21,6 +22,7 @@ app.disable("x-powered-by");
 // Receiving JSON Data
 app.use(express.json());
 
+app.use(cors());
 
 // call routes
 handleRoutes(app);
