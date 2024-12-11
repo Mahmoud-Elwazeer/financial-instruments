@@ -10,9 +10,20 @@ export const getAll = async(req) => {
     
     // Build the query object for filtering
     const query = {};
-    if (type) query.type = type;
-    if (currency) query.currency = currency;
-    if (country) query.country = country;
+
+    // Support multiple values for type, country, and currency
+    if (type) {
+        const types = Array.isArray(type) ? type : type.split(',');
+        query.type = { $in: types };
+    }
+    if (currency) {
+        const currencies = Array.isArray(currency) ? currency : currency.split(',');
+        query.currency = { $in: currencies };
+    }
+    if (country) {
+        const countries = Array.isArray(country) ? country : country.split(',');
+        query.country = { $in: countries };
+    }
 
     // Fetch exchanges with pagination
     const exchanges = await Exchange.find(query)
