@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Exchange, Candle } from '../types/exchange';
 import { FilterOptions } from '../types/filters';
+import { CompanyMetadata } from '../types/metadata';
 import { ApiResponse, PaginatedResponse } from '../types/api';
 
 const api = axios.create({  
@@ -34,4 +35,12 @@ export const getCandles = async (symbol: string) => {
 export const getFilterOptions = async (): Promise<FilterOptions> => {
   const { data } = await api.get('/exchanges/filters');
   return data.filters;
+};
+
+export const getMetadata = async (symbol: string) => {
+  const { data } = await api.get<ApiResponse<{ data: CompanyMetadata[] }>>(
+    `/metadata/${symbol}`
+  );
+  console.log(data.metadata)
+  return data.metadata;
 };

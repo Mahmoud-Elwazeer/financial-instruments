@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
-import { getExchanges, getCandles } from './services/api';
+import { getExchanges, getCandles, getMetadata } from './services/api';
 import { Filters } from './components/Filters';
 import { ExchangeList } from './components/ExchangeList';
 import { CandleChart } from './components/CandleChart';
@@ -8,6 +8,7 @@ import { CandleChart } from './components/CandleChart';
 import { Exchange } from './types/exchange';
 import { FilterPanel } from './components/filters/FilterPanel';
 import { useExchangeFilters } from './hooks/useExchangeFilters';
+import { MetadataDisplay } from './components/metadata/MetadataDisplay';
 
 
 const queryClient = new QueryClient({
@@ -24,10 +25,6 @@ function ExchangePage() {
   const { filters, handleFilterChange, handleReset, getQueryParams } = useExchangeFilters();
 
 
-  // const { data: exchanges = [] } = useQuery({
-  //   queryKey: ['exchanges', filters],
-  //   queryFn: () => getExchanges(filters),
-  // });
 
   const { 
     data: exchanges = [], 
@@ -51,6 +48,19 @@ function ExchangePage() {
     enabled: !!selectedExchange,
   });
 
+  const { 
+    data: metadata = [], 
+    isLoading: isMetadataLoading,
+    isError: isMetadataError,
+  } = useQuery({
+    queryKey: ['metadata', selectedExchange?.symbol],
+    queryFn: () =>
+      selectedExchange
+        ? getMetadata(selectedExchange.symbol)
+        : Promise.resolve([]),
+    enabled: !!selectedExchange,
+  });
+
   const handleApplyFilters = () => {
     refetchExchanges();
   };
@@ -64,7 +74,6 @@ function ExchangePage() {
     <div className="min-h-screen bg-gray-100">
       <div className="max-w-7xl mx-auto px-4 py-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-6">Financial Exchanges</h1>
-        {/* <Filters onFilterChange={setFilters} /> */}
         <FilterPanel
           filters={filters}
           onFilterChange={handleFilterChange}
@@ -94,16 +103,20 @@ function ExchangePage() {
                   isError={isCandlesError}
                 />
               </div>
-              {/* <div className="bg-white p-4 rounded-lg shadow-sm">
-                <CandleData 
-                  data={candles}
-                  isLoading={isCandlesLoading}
-                  isError={isCandlesError}
-                />
-              </div> */}
             </div>
           )}
         </div>
+
+        {/* Full-width metadata section */}
+        {selectedExchange && (
+          <div className="mt-6 bg-white p-4 rounded-lg shadow-sm">
+            <MetadataDisplay 
+              data={metadata}
+              isLoading={isMetadataLoading}
+              isError={isMetadataError}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
