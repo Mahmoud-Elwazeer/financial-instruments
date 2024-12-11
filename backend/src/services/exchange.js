@@ -23,13 +23,11 @@ export const getAll = async(req) => {
         query.country = { $in: countries };
     }
 
-    // Fetch exchanges with pagination
     const exchanges = await Exchange.find(query)
     
     if (!exchanges || exchanges.length === 0)
         throw new ApiError('Not Found Exchanges', 404);
 
-    // Get total count of documents for pagination info
     const totalExchanges = await Exchange.countDocuments(query);
 
     const data = {

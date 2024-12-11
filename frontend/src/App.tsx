@@ -6,6 +6,9 @@ import { ExchangeList } from './components/ExchangeList';
 import { CandleChart } from './components/CandleChart';
 // import { CandleData } from './components/CandleData';
 import { Exchange } from './types/exchange';
+import { FilterPanel } from './components/filters/FilterPanel';
+import { useExchangeFilters } from './hooks/useExchangeFilters';
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,12 +20,22 @@ const queryClient = new QueryClient({
 });
 
 function ExchangePage() {
-  const [filters, setFilters] = useState({});
   const [selectedExchange, setSelectedExchange] = useState<Exchange | null>(null);
+  const { filters, handleFilterChange, handleReset, getQueryParams } = useExchangeFilters();
 
-  const { data: exchanges = [] } = useQuery({
-    queryKey: ['exchanges', filters],
-    queryFn: () => getExchanges(filters),
+
+  // const { data: exchanges = [] } = useQuery({
+  //   queryKey: ['exchanges', filters],
+  //   queryFn: () => getExchanges(filters),
+  // });
+
+  const { 
+    data: exchanges = [], 
+    refetch: refetchExchanges,
+    isLoading: isExchangesLoading,
+  } = useQuery({
+    queryKey: ['exchanges', getQueryParams()],
+    queryFn: () => getExchanges(getQueryParams()),
   });
 
   const { 
@@ -38,13 +51,29 @@ function ExchangePage() {
     enabled: !!selectedExchange,
   });
 
+  const handleApplyFilters = () => {
+    refetchExchanges();
+  };
+
+  const handleResetFilters = () => {
+    handleReset();
+    refetchExchanges();
+  };
+
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="max-w-7xl mx-auto px-4 py-6">
         <h1 className="text-3xl font-bold text-gray-900 mb-6">Financial Exchanges</h1>
-        <Filters onFilterChange={setFilters} />
+        {/* <Filters onFilterChange={setFilters} /> */}
+        <FilterPanel
+          filters={filters}
+          onFilterChange={handleFilterChange}
+          onApply={handleApplyFilters}
+          onReset={handleResetFilters}
+          hasResults={!isExchangesLoading && exchanges.length > 0}
+        />
         
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
           <div>
             <ExchangeList
               exchanges={exchanges}

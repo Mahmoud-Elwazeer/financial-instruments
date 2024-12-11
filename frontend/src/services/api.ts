@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { Exchange, Candle } from '../types/exchange';
+import { FilterOptions } from '../types/filters';
 import { ApiResponse, PaginatedResponse } from '../types/api';
 
-const api = axios.create({
+const api = axios.create({  
   baseURL: 'http://51.20.89.154/api/v1'
 });
 
@@ -28,4 +29,9 @@ export const getCandles = async (symbol: string) => {
     `/candles/${symbol}`
   );
   return data.candles.data;
+};
+
+export const getFilterOptions = async (): Promise<FilterOptions> => {
+  const { data } = await api.get('/exchanges/filters');
+  return data.filters;
 };
