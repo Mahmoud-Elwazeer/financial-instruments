@@ -12,7 +12,7 @@ export const getAll = async(req) => {
     const query = {};
     if (type) query.type = type;
     if (currency) query.currency = currency;
-    if (currency) query.country = country;
+    if (country) query.country = country;
 
     // Fetch exchanges with pagination
     const exchanges = await Exchange.find(query)
@@ -50,4 +50,36 @@ export const getOne = async(req) => {
         throw new ApiError('Not Found Exchange', 404);
 
     return exchange
+}
+
+
+export const getExchangeFilters = async(req) => {
+   // Aggregate unique values for type, currency, and country, sorted alphabetically
+    const filters = await Exchange.aggregate([
+    {
+        $facet: {
+            types: [
+                { $group: { _id: "$type" } },
+                { $sort: { _id: 1 } } // Sort types alphabetically
+            ],
+            currencies: [
+                { $group: { _id: "$currency" } },
+                { $sort: { _id: 1 } } // Sort currencies alphabetically
+            ],
+            countries: [
+                { $group: { _id: "$country" } },
+                { $sort: { _id: 1 } } // Sort countries alphabetically
+            ]
+        }
+    },
+    {
+        $project: {
+            types: { $map: { input: "$types", as: "type", in: "$$type._id" } },
+            currencies: { $map: { input: "$currencies", as: "currency", in: "$$currency._id" } },
+            countries: { $map: { input: "$countries", as: "country", in: "$$country._id" } }
+        }
+    }
+    ]);
+
+    return filters.length > 0 ? filters[0] : { types: [], currencies: [], countries: [] };
 }

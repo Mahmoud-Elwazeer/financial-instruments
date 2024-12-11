@@ -17,3 +17,10 @@ export const getOne = asyncHandler(async(req, res, next) => {
 });
 
 
+// @desc Returns unique values of type, currency, and country fields 
+// from the exchanges collection for use in filtering.
+// @route get /api/v1/exchanges/filters
+export const getExchangeFilters = asyncHandler(async(req, res, next) => {
+    const filters = await exchangeServices.getExchangeFilters(req);
+    res.status(200).json({message: 'Filters Retrieved successfully', filters});
+});
