@@ -109,12 +109,21 @@ function ExchangePage() {
 
         {/* Full-width metadata section */}
         {selectedExchange && (
-          <div className="mt-6 bg-white p-4 rounded-lg shadow-sm">
-            <MetadataDisplay 
-              data={metadata}
-              isLoading={isMetadataLoading}
-              isError={isMetadataError}
-            />
+          <div className="mt-6">
+            {Object.keys(metadata).length === 0 && !isMetadataLoading ? (
+              <div className="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+                <strong className="font-bold">Notice:</strong>
+                <span className="block sm:inline"> No Metadata available for this exchange.</span>
+              </div>
+            ) : (
+              <div className="mt-6 bg-white p-4 rounded-lg shadow-sm">
+                <MetadataDisplay 
+                  data={metadata}
+                  isLoading={isMetadataLoading}
+                  isError={isMetadataError}
+                />
+              </div>
+            )}
           </div>
         )}
       </div>

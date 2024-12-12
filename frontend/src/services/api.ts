@@ -41,6 +41,5 @@ export const getMetadata = async (symbol: string) => {
   const { data } = await api.get<ApiResponse<{ data: CompanyMetadata[] }>>(
     `/metadata/${symbol}`
   );
-  console.log(data.metadata)
   return data.metadata;
 };

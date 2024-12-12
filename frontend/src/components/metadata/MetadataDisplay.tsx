@@ -20,7 +20,8 @@ export const MetadataDisplay: React.FC<MetadataDisplayProps> = ({ data, isLoadin
   }
 
   if (isError) {
-    return <ErrorMessage message="No candle data available for this exchange" />;
+    // return <ErrorMessage message="No Metadata data available for this exchange" />;
+    return;
   }
 
   // if (data.length === 0) {
