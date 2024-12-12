@@ -1,6 +1,10 @@
 import ApiError from "../utils/apiError.js";
 import Exchange from '../models/exchange.js';
+import client from "../configurations/redis.js";
+import getDataFromRedis from "../utils/redis.js";
+import 'dotenv/config';
 
+const expireTime = process.env.ExpiryTimeForCache || 3600;
 
 export const getAll = async(req) => {
     // Get query parameters for pagination
@@ -23,6 +27,16 @@ export const getAll = async(req) => {
         query.country = { $in: countries };
     }
 
+    const cacheKey = `exchanges:${JSON.stringify(query)}`;
+
+    // First check if data exists in the cache
+    const exchangesData = await getDataFromRedis(cacheKey);
+    
+    if (exchangesData) {
+        console.log('Data fetched from cache');
+        return exchangesData;
+    }
+
     const exchanges = await Exchange.find(query)
     
     if (!exchanges || exchanges.length === 0)
@@ -34,6 +48,10 @@ export const getAll = async(req) => {
         totalItems: totalExchanges,
         data: exchanges,
     }
+
+    // Cache the result in Redis with an expiration time of 1 hour
+    client.setEx(cacheKey, expireTime, JSON.stringify(data));
+    console.log('Data fetched from MongoDB and cached');
 
     return data
 }

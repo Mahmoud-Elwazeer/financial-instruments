@@ -1,5 +1,12 @@
 import ApiError from "../utils/apiError.js";
 import Candle from '../models/candle.js';
+import client from "../configurations/redis.js";
+import getDataFromRedis from "../utils/redis.js";
+import 'dotenv/config';
+
+const expireTime = process.env.ExpiryTimeForCache || 3600;
+
+
 
 // Helper function to validate date
 const isValidDate = (dateString) => {
@@ -36,6 +43,16 @@ export const getAll = async(req) => {
         if (toDate) query.dateTime.$lte = toDate;
     }
 
+    const cacheKey = `candles:${JSON.stringify(query)}`;
+
+    // First check if data exists in the cache
+    const candlesData = await getDataFromRedis(cacheKey);
+    
+    if (candlesData) {
+        console.log('Data fetched from cache');
+        return candlesData;
+    }
+
     // Fetch the candles from the database
     const candles = await Candle.find(query).sort({ dateTime: 1 });;
 
@@ -51,6 +68,10 @@ export const getAll = async(req) => {
         totalItems: totalCandles,
         data: candles
     };
+
+    // Cache the result in Redis with an expiration time of 1 hour
+    client.setEx(cacheKey, expireTime, JSON.stringify(data));
+    console.log('Data fetched from MongoDB and cached');
 
     return data;
 }
