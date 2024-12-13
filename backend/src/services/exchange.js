@@ -53,9 +53,7 @@ export const getAll = async(req) => {
     return data
 }
 
-export const getOne = async(req) => {
-    const { symbol } = req.params;
-
+export const getOne = async(symbol) => {
     const exchange = await Exchange.findOne({ symbol });
     if (!exchange)
         throw new ApiError('Not Found Exchange', 404);

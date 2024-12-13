@@ -12,7 +12,8 @@ export const getAll = asyncHandler(async(req, res, next) => {
 // @desc Fetch detailed information about a specific exchange by its symbol.
 // @route get /api/v1/exchanges/:symbol
 export const getOne = asyncHandler(async(req, res, next) => {
-    const exchange = await exchangeServices.getOne(req);
+    const { symbol } = req.params;
+    const exchange = await exchangeServices.getOne(symbol);
     res.status(200).json({message: 'Exchange Retrieved successfully', exchange});
 });
 
