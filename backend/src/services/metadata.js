@@ -15,7 +15,6 @@ export const getOne = async(req) => {
     const metadataData = await getDataFromRedis(cacheKey);
     
     if (metadataData) {
-        console.log('Data fetched from cache');
         return metadataData;
     }
 
@@ -25,7 +24,6 @@ export const getOne = async(req) => {
 
     // Cache the result in Redis with an expiration time of 1 hour
     client.setEx(cacheKey, expireTime, JSON.stringify(metadata));
-    console.log('Data fetched from MongoDB and cached');
 
     return metadata
 }
