@@ -49,7 +49,6 @@ export const getAll = async(req) => {
     const candlesData = await getDataFromRedis(cacheKey);
     
     if (candlesData) {
-        console.log('Data fetched from cache');
         return candlesData;
     }
 
@@ -71,7 +70,6 @@ export const getAll = async(req) => {
 
     // Cache the result in Redis with an expiration time of 1 hour
     client.setEx(cacheKey, expireTime, JSON.stringify(data));
-    console.log('Data fetched from MongoDB and cached');
 
     return data;
 }
