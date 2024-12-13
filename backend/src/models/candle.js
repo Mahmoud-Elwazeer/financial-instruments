@@ -48,7 +48,7 @@ const  candle = new mongoose.Schema({
 
 
 // Indexing for faster queries
-candle.index({ symbol: 1, dateTime: -1 }, { unique: true });
+candle.index({ symbol: 1, dateTime: 1 }, { unique: true });
 
 const Candle = mongoose.model('Candle', candle, 'candles');
 

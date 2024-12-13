@@ -53,7 +53,7 @@ export const getAll = async(req) => {
     }
 
     // Fetch the candles from the database
-    const candles = await Candle.find(query).sort({ dateTime: 1 });;
+    const candles = await Candle.find(query).sort({ dateTime: 1 });
 
     if (!candles || candles.length === 0) {
         throw new ApiError('Not Found Candles', 404);

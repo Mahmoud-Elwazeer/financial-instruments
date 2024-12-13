@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 // schema
-const echange = new mongoose.Schema({
+const exchange = new mongoose.Schema({
     symbol: {
         type: String,
         unique: true,
@@ -45,8 +45,13 @@ const echange = new mongoose.Schema({
 ); // Automatically add createdAt and updatedAt fields
 
 // Index for faster lookups
-echange.index({ symbol: 1, type: 1 });
+exchange.index({ symbol: 1 });
+exchange.index({ type: 1 });
+exchange.index({ currency: 1 });
+exchange.index({ country: 1 });
+exchange.index({ type: 1, currency: 1, country: 1 });
 
-const Exchange = mongoose.model('Exchange', echange, 'exchanges');
+
+const Exchange = mongoose.model('Exchange', exchange, 'exchanges');
 
 export default Exchange;
