@@ -1,9 +1,12 @@
 import React, { useEffect, useRef } from 'react';
-import { createChart, ColorType, IChartApi, Time } from 'lightweight-charts';
-import { Candle } from '../types/exchange';
-import { format } from 'date-fns';
-import { LoadingSpinner } from './LoadingSpinner';
-import { ErrorMessage } from './ErrorMessage';
+import { createChart, IChartApi, Time } from 'lightweight-charts';
+import { Candle } from '../../types/candle';
+import { LoadingSpinner } from '../loadingPage/LoadingSpinner';
+import { ErrorMessage } from '../ErrorMessage/ErrorMessage';
+import { useTheme } from '../../contexts/ThemeContext';
+import { CandleChartTooltip } from './CandleChartTooltip';
+import { useChartConfig } from './useChartConfig';
+import ReactDOMServer from 'react-dom/server'; 
 
 interface CandleChartProps {
   data: Candle[];
@@ -15,63 +18,50 @@ export const CandleChart: React.FC<CandleChartProps> = ({ data, isLoading, isErr
   const chartContainerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
+  const { isDark } = useTheme();
+  const chartConfig = useChartConfig(isDark);
 
   useEffect(() => {
     if (chartContainerRef.current && data.length > 0) {
       const chart = createChart(chartContainerRef.current, {
-        layout: {
-          background: { type: ColorType.Solid, color: 'white' },
-          textColor: 'black',
-        },
+        ...chartConfig,
         width: chartContainerRef.current.clientWidth,
         height: 400,
         crosshair: {
           mode: 0,
         },
-        grid: {
-          vertLines: { color: '#f0f0f0' },
-          horzLines: { color: '#f0f0f0' },
-        },
       });
 
       const candlestickSeries = chart.addCandlestickSeries({
-        upColor: '#26a69a',
-        downColor: '#ef5350',
+        upColor: '#10b981',
+        downColor: '#ef4444',
         borderVisible: true,
-        wickUpColor: '#26a69a',
-        wickDownColor: '#ef5350',
-        borderColor: '#378658',
+        wickUpColor: '#10b981',
+        wickDownColor: '#ef4444',
       });
 
       const chartData = data.map((candle) => ({
         time: candle.dateTime.split('T')[0] as Time,
         open: candle.startPrice,
-        high: Math.max(candle.highestPrice, candle.startPrice + 0.0001), // Ensure some height for flat candles
-        low: Math.min(candle.lowestPrice, candle.startPrice - 0.0001), // Ensure some height for flat candles
+        high: Math.max(candle.highestPrice, candle.startPrice + 0.0001),
+        low: Math.min(candle.lowestPrice, candle.startPrice - 0.0001),
         close: candle.endPrice,
       }));
 
       candlestickSeries.setData(chartData);
-
-      // Auto-scale the chart
       chart.timeScale().fitContent();
 
-      // Subscribe to crosshair move to update tooltip
       chart.subscribeCrosshairMove(param => {
         if (tooltipRef.current && param.time) {
           const candle = data.find(c => c.dateTime.startsWith(param.time as string));
           if (candle) {
             tooltipRef.current.style.display = 'block';
-            tooltipRef.current.innerHTML = `
-              <div class="text-sm">
-                <div class="font-semibold">${format(new Date(candle.dateTime), 'MMM dd, yyyy')}</div>
-                <div>Open: ${candle.startPrice.toFixed(2)}</div>
-                <div>Close: ${candle.endPrice.toFixed(2)}</div>
-                <div>High: ${candle.highestPrice.toFixed(2)}</div>
-                <div>Low: ${candle.lowestPrice.toFixed(2)}</div>
-                <div>Volume: ${candle.volume.toLocaleString()}</div>
-              </div>
-            `;
+            tooltipRef.current.innerHTML = '';
+            const tooltipContent = document.createElement('div');
+            tooltipContent.innerHTML = ReactDOMServer.renderToString(
+              <CandleChartTooltip candle={candle} isDark={isDark} />
+            );
+            tooltipRef.current.appendChild(tooltipContent);
 
             const coordinate = param.point;
             if (coordinate) {
@@ -101,7 +91,7 @@ export const CandleChart: React.FC<CandleChartProps> = ({ data, isLoading, isErr
         chart.remove();
       };
     }
-  }, [data]);
+  }, [data, isDark, chartConfig]);
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -120,7 +110,11 @@ export const CandleChart: React.FC<CandleChartProps> = ({ data, isLoading, isErr
       <div ref={chartContainerRef} className="w-full" />
       <div
         ref={tooltipRef}
-        className="absolute hidden bg-white p-2 rounded-lg shadow-lg border border-gray-200 z-50"
+        className={`absolute hidden p-2 rounded-lg shadow-lg border z-50 ${
+          isDark 
+            ? 'bg-gray-800 border-gray-700 text-gray-200' 
+            : 'bg-white border-gray-200 text-gray-800'
+        }`}
       />
     </div>
   );
