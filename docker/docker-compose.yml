@@ -4,7 +4,7 @@ services:
       context: ./../frontend
       dockerfile: Dockerfile
       args:
-      - VITE_API_URL=http://financial-instruments-api:3000/api/v1
+      - VITE_API_URL=http://127.0.0.1:3000/api/v1
     ports:
       - "8080:80" # Frontend served on port 8080
     depends_on:
@@ -12,7 +12,8 @@ services:
     volumes:
       - ./../frontend:/app
     networks:
-      - app-network
+      - backend-financial
+
   financial-instruments-api:
     build:
       context: ./../backend
@@ -35,7 +36,8 @@ services:
       - ./../backend:/app
     command:  sh -c "npm run migrate && pm2-runtime pm2.config.cjs"
     networks:
-      - app-network
+      - backend-financial
+      - frontend-financial
 
   mongo:
     image: mongo:6
@@ -43,17 +45,17 @@ services:
     volumes:
       - mongo-data:/data/db
     networks:
-      - app-network
+      - backend-financial
 
   redis:
     image: redis:7
     container_name: redis
     networks:
-      - app-network
+      - backend-financial
 
 networks:
-  app-network:
-    driver: bridge
+  backend-financial:
+  frontend-financial:
 
 volumes:
   mongo-data:
