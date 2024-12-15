@@ -4,9 +4,6 @@ module.exports = {
         name: 'api',
         script: './src/server.js',
         env: {
-          NODE_ENV: 'dev',
-        },
-        env_production: {
           NODE_ENV: 'production',
           DB_DATABASE: 'financial_instrument',
           DB_PORT: 27017,

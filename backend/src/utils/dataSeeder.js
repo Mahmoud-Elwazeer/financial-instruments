@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 // Models
 import Exchange from '../models/exchange.js';
@@ -8,10 +9,13 @@ import Metadata from '../models/metadata.js';
 
 import dbConnection from '../configurations/database.js'
 
+// Define __dirname for ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Read JSON Files
 const loadJSON = (fileName) => {
-    const filePath = path.join(process.cwd(), 'data', fileName);
+    const filePath = path.join(__dirname, 'data', fileName);
     return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 };
 

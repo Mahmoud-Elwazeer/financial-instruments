@@ -1,0 +1,60 @@
+services:
+  frontend:
+    build:
+      context: ./../frontend
+      dockerfile: Dockerfile
+      args:
+      - VITE_API_URL=http://financial-instruments-api:3000/api/v1
+    ports:
+      - "8080:80" # Frontend served on port 8080
+    depends_on:
+      - financial-instruments-api
+    volumes:
+      - ./../frontend:/app
+    networks:
+      - app-network
+  financial-instruments-api:
+    build:
+      context: ./../backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DB_HOST=mongo
+      - DB_PORT=27017
+      - DB_DATABASE=financial_instrument
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - ExpiryTimeForCache=3600
+    depends_on:
+      - mongo
+      - redis
+    volumes:
+      - ./../backend:/app
+    command:  sh -c "npm run migrate && pm2-runtime pm2.config.cjs"
+    networks:
+      - app-network
+
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - app-network
+
+  redis:
+    image: redis:7
+    container_name: redis
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+
