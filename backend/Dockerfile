@@ -15,12 +15,3 @@ RUN npm install -g pm2
 
 # Copy the rest of the application files
 COPY . .
-
-# Set environment variables
-ENV NODE_ENV=production
-
-# Expose the application's port
-EXPOSE 3000
-
-# Command to run migrations and start the server with PM2
-CMD ["sh", "-c", "npm run migrate && pm2-runtime pm2.config.cjs"]
