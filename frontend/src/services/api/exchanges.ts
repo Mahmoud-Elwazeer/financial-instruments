@@ -11,16 +11,11 @@ interface ExchangeFilters {
 }
 
 export const getExchanges = async (filters: ExchangeFilters) => {
-  try {
-    const { data } = await api.get<ApiResponse<{ pagination: PaginatedResponse<Exchange> }>>(
-      '/exchanges',
-      { params: filters }
-    );
-    return data.exchanges.data;
-  } catch (error) {
-    console.error('Error fetching exchanges:', error);
-  }
-  
+  const { data } = await api.get<ApiResponse<{ pagination: PaginatedResponse<Exchange> }>>(
+    '/exchanges',
+    { params: filters }
+  );
+  return data.exchanges.data;
 };
 
 export const getExchangeDetails = async (symbol: string) => {
