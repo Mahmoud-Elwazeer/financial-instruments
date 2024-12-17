@@ -55,6 +55,9 @@ export const getAll = async(req) => {
     // Fetch the candles from the database
     const candles = await Candle.find(query).sort({ dateTime: 1 });
 
+    if ((fromDate || toDate) && (!candles || candles.length === 0))
+        throw new ApiError('No data found for the selected time range. Please adjust the date range and try again', 404)
+
     if (!candles || candles.length === 0) {
         throw new ApiError('Not Found Candles', 404);
     }
