@@ -1,7 +1,7 @@
 // Global error Handling middleware
 import 'dotenv/config'
 
-export const globalError = (err, req, res, next) => {
+const globalError = (err, req, res, next) => {
     err.statusCode = err.statusCode || 500; 
     err.status = err.status || 'error';
 
@@ -27,3 +27,5 @@ const sendError = (err, res) => {
     message: err.message,
     });
 }
+
+export default globalError
