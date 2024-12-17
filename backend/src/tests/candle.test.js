@@ -98,7 +98,7 @@ describe('GET /api/v1/candles/:symbol', () => {
     it('should return 404 if no candles match the query', async () => {
         const res = await request(app).get('/api/v1/candles/AAPL?from=2025-01-01&to=2025-12-31');
         expect(res.status).toBe(404);
-        expect(res.body.message).toBe('Not Found Candles');
+        expect(res.body.message).toBe('No data found for the selected time range. Please adjust the date range and try again');
     });
 
     it('should return 404 for a missing symbol', async () => {

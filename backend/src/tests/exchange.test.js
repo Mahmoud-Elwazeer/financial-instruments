@@ -194,7 +194,7 @@ describe('GET /api/v1/exchanges', () => {
     it('should return messgae error Not Found Exchange', async () => {
         const res = await request(app).get('/api/v1/exchanges').query({ type: 'crypto' });
         expect(res.status).toBe(404);
-        expect(res.body.message).toBe('Not Found Exchanges');
+        expect(res.body.message).toBe('No Exchanges found for the selected Filtration. Please adjust Filtration and try again');
     });
 
     it('should filter exchanges by multiple query parameters and error not found', async () => {
@@ -202,7 +202,7 @@ describe('GET /api/v1/exchanges', () => {
             .get('/api/v1/exchanges')
             .query({ type: 'stock', currency:'EUR', country: 'USA' });
             expect(res.status).toBe(404);
-            expect(res.body.message).toBe('Not Found Exchanges');
+            expect(res.body.message).toBe('No Exchanges found for the selected Filtration. Please adjust Filtration and try again');
     });
 });
 

@@ -37,6 +37,9 @@ export const getAll = async(req) => {
     }
 
     const exchanges = await Exchange.find(query)
+
+    if ((type || currency || country) && (!exchanges || exchanges.length === 0))
+        throw new ApiError('No Exchanges found for the selected Filtration. Please adjust Filtration and try again', 404)
     
     if (!exchanges || exchanges.length === 0)
         throw new ApiError('Not Found Exchanges', 404);
