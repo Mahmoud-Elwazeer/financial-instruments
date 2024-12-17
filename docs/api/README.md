@@ -10,9 +10,9 @@ The base URL for all API requests is:
 
 ## Endpoints Overview
 
-1. **Exchanges**: Retrieve, filters, and get detailed information about exchanges.
-2. **Favorites**: Manage a list of favorite exchanges.
-3. **Candles**: Fetch historical candle data for financial instruments.
-4. **Metadata**: Retrieve metadata about financial instruments.
+1. [Exchanges](./exchanges.md): Retrieve, filters, and get detailed information about exchanges.
+2. [Favorites](./favorites.md): Manage a list of favorite exchanges.
+3. [Candles](./candles.md): Fetch historical candle data for financial instruments.
+4. [Metadata](./metadata.md): Retrieve metadata about financial instruments.
 
 For more details, refer to the specific sections for each endpoint below.
