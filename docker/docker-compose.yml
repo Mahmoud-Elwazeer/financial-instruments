@@ -13,6 +13,8 @@ services:
       - ./../frontend:/app
     networks:
       - backend-financial
+    logging: 
+      driver: "none" # Disable logs for frontend
 
   financial-instruments-api:
     build:
@@ -38,6 +40,8 @@ services:
     networks:
       - backend-financial
       - frontend-financial
+    logging: 
+      driver: "none" # Disable logs for backend
 
   mongo:
     image: mongo:6
@@ -46,12 +50,16 @@ services:
       - mongo-data:/data/db
     networks:
       - backend-financial
+    logging: 
+      driver: "none" # Disable logs for Redis
 
   redis:
     image: redis:7
     container_name: redis
     networks:
       - backend-financial
+    logging: 
+      driver: "none" # Disable logs for Redis
 
 networks:
   backend-financial:
