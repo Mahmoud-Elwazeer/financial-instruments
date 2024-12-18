@@ -11,6 +11,7 @@ dbConnection();
 // Start server
 try {
     app.listen(PORT, () => {
+        console.log("test")
         console.log(`Server is running on http://localhost:${PORT}`);
     });
 } catch (error) {
