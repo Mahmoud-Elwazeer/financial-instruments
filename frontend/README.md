@@ -1,6 +1,6 @@
 # **Overview**
 
-The frontend of this application isbuilt with **React**, **Vite**, and **TypeScript**. It includes various features such as charts, exchange data display, and filtering functionalities, designed to provide a smooth user experience with interactive UI elements.
+The frontend of this application is built with **React**, **Vite**, and **TypeScript**. It includes various features such as charts, exchange data display, and filtering functionalities, designed to provide a smooth user experience with interactive UI elements.
 
 ## Technologies Used
 
@@ -26,7 +26,8 @@ The frontend of this application isbuilt with **React**, **Vite**, and **TypeScr
     
     ```bash
     git clone https://github.com/Mahmoud-Elwazeer/financial-instruments.git
-    cd frontend
+    
+    cd financial-instruments/frontend
     ```
     
 2. **Install dependencies**:

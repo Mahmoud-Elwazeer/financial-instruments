@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=http://127.0.0.1:${BACKEND_PORT}/api/v1
+    ports:
+      - "${FRONTEND_PORT}:80" # Frontend served on the port defined in .env
+    depends_on:
+      financial-instruments-api:
+        condition: service_healthy
+    volumes:
+      - ./frontend:/app
+    networks:
+      - backend-financial
+    logging: 
+      driver: "${LOGGING_DRIVER}" # Logging driver set from .env
+
+  financial-instruments-api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "${BACKEND_PORT}:${BACKEND_PORT}"
+    environment:
+      - NODE_ENV=production
+      - PORT=${BACKEND_PORT}
+      - DB_HOST=mongo
+      - DB_PORT=27017
+      - DB_DATABASE=financial_instrument
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - ExpiryTimeForCache=${EXPIRY_TIME_FOR_CACHE} # Cache expiry time from .env
+    depends_on:
+      - mongo
+      - redis
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:${BACKEND_PORT}"]
+      interval: 5s
+      timeout: 2s
+      retries: 10
+    volumes:
+      - ./backend:/app
+    command: sh -c "npm run migrate && pm2-runtime pm2.config.cjs"
+    networks:
+      - backend-financial
+      - frontend-financial
+    logging: 
+      driver: "${LOGGING_DRIVER}" # Logging driver set from .env
+
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - backend-financial
+    logging: 
+      driver: "${LOGGING_DRIVER}" # Logging driver set from .env
+
+  redis:
+    image: redis:7
+    container_name: redis
+    networks:
+      - backend-financial
+    logging: 
+      driver: "${LOGGING_DRIVER}" # Logging driver set from .env
+
+networks:
+  backend-financial:
+  frontend-financial:
+
+volumes:
+  mongo-data:

@@ -22,16 +22,14 @@ The backend of this application is built to provide high-performance APIs for ma
     
     ```bash
     git clone https://github.com/Mahmoud-Elwazeer/financial-instruments.git
-    cd backend
-    
+
+    cd financial-instruments/backend
     ```
     
 2. **Install Dependencies**:
     
     ```bash
-    
     npm install
-    
     ```
     
 3. **Set Up Environment Variables**:
