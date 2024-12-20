@@ -1,7 +1,6 @@
-export interface Pagination {
-  currentPage: number;
-  totalPages: number;
-  totalItems: number;
+export interface ApiError {
+  status: string;
+  message: string;
 }
 
 export interface ApiResponse<T> {
@@ -9,7 +8,8 @@ export interface ApiResponse<T> {
   [key: string]: T | string;
 }
 
-export interface PaginatedResponse<T> {
-  pagination: Pagination;
+
+export interface DataResponse<T> {
+  totalItems: number;
   data: T[];
 }
