@@ -79,8 +79,6 @@ const metadata = new Schema({
 });
 
 
-metadata.index({ symbol: 1 });
-
 const Metadata = mongoose.model('Metadata', metadata, 'metadata');
 
 export default Metadata

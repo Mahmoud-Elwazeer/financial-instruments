@@ -45,7 +45,6 @@ const exchange = new mongoose.Schema({
 ); // Automatically add createdAt and updatedAt fields
 
 // Index for faster lookups
-exchange.index({ symbol: 1 });
 exchange.index({ type: 1 });
 exchange.index({ currency: 1 });
 exchange.index({ country: 1 });
