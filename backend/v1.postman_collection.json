@@ -1,0 +1,225 @@
+{
+	"info": {
+		"_postman_id": "68d67578-70dc-441f-81fc-a10cea30df46",
+		"name": "v1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33651104"
+	},
+	"item": [
+		{
+			"name": "Exchanges",
+			"item": [
+				{
+					"name": "get all exchanges.",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/v1/exchanges",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"exchanges"
+							],
+							"query": [
+								{
+									"key": "type",
+									"value": "common stock,mutual fund",
+									"disabled": true
+								},
+								{
+									"key": "currency",
+									"value": "EUR,USD",
+									"disabled": true
+								},
+								{
+									"key": "country",
+									"value": "USA",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "return the unique values of type, currency, and country for filtering exchanges",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/v1/exchanges/filters",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"exchanges",
+								"filters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get one exchange by its symbol.",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/v1/exchanges/TL0.XETRA",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"exchanges",
+								"TL0.XETRA"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Candles",
+			"item": [
+				{
+					"name": "Fetch a list of all candle data for a specific financial instrument.",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/v1/candles/TL0.XETRA",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"candles",
+								"TL0.XETRA"
+							],
+							"query": [
+								{
+									"key": "from",
+									"value": "2024-12-01",
+									"disabled": true
+								},
+								{
+									"key": "to",
+									"value": "2024-05-01",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Metadata",
+			"item": [
+				{
+					"name": "Fetch metadata for a specific financial instrument by its symbol.",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/v1/metadata/ALEZX.US",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"metadata",
+								"ALEZX.US"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Favorites",
+			"item": [
+				{
+					"name": "add favorite",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"symbol\": \"ALEZX.US\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/api/v1/favorites",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"favorites"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all their favorite exchanges",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/v1/favorites",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"favorites"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete exchange from favorite",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/v1/favorites/ALEZX.US",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"favorites",
+								"ALEZX.US"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

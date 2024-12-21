@@ -2,6 +2,8 @@
 
 This project is a  financial data platform designed to manage, and visualize market data efficiently. It is built with scalability and high performance in mind, leveraging modern technologies like **React**, **Node.js**, **Express**,  **MongoDB**, and **Redis**, all orchestrated with **Docker** 
 
+To explore the platform, check out the live demo at [Demo](https://financial-instruments-neon.vercel.app/).
+
 For more details please visit **`docs/`**
 
 ## Prerequisites

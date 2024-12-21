@@ -16,3 +16,12 @@ The base URL for all API requests is:
 4. [Metadata](./metadata.md): Retrieve metadata about financial instruments.
 
 For more details, refer to the specific sections for each endpoint below.
+
+## Postman Collection
+You can find the Postman collection for the API in the backend directory under the file name `v1.postman_collection.json`.
+
+For more details, refer to the specific sections for each endpoint below.
+
+
+
+
