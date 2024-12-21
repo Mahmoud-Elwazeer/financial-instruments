@@ -106,7 +106,7 @@ export const CandleChart: React.FC<CandleChartProps> = ({ data, isLoading, isErr
   }
 
   return (
-    <div className="relative">
+    <div className="relative h-full">
       <div ref={chartContainerRef} className="w-full" />
       <div
         ref={tooltipRef}

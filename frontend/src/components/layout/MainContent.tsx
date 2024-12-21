@@ -6,6 +6,10 @@ import { PopupChart } from '../charts/PopupChart';
 import { useQuery } from '@tanstack/react-query';
 import { getMetadata } from '../../services/api';
 import { ChartSection } from '../charts/ChartSection';
+import { CompanyMetadata } from '../../types/metadata';
+import { LoadingSpinner } from '../loadingPage/LoadingSpinner';
+import { NoExchangeSelected } from '../exchanges/NoExchangeSelected';
+
 
 interface MainContentProps {
   selectedExchange: Exchange | null;
@@ -30,7 +34,7 @@ export const MainContent: React.FC<MainContentProps> = ({
   const [isChartModalOpen, setIsChartModalOpen] = useState(false);
 
   const { 
-    data: metadata = {}, 
+    data: metadata = {} as CompanyMetadata, 
     isLoading: isMetadataLoading,
     isError: isMetadataError,
     error: metadataError,
@@ -44,10 +48,12 @@ export const MainContent: React.FC<MainContentProps> = ({
   });
 
   return (
-    <main className="max-w-7xl mx-auto space-y-6">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-[600px]">
-        <div className="h-full">
-          <div className="sticky top-24 bg-white dark:bg-gray-800 rounded-lg shadow-sm overflow-hidden">
+    <div className="max-w-7xl mx-auto">
+      {/* Grid container with fixed heights */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* Exchange list with fixed height */}
+        <div className="h-[600px] bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+          <div className="h-full overflow-hidden">
             <ExchangeList
               exchanges={exchanges}
               onExchangeSelect={onExchangeSelect}
@@ -60,31 +66,33 @@ export const MainContent: React.FC<MainContentProps> = ({
           </div>
         </div>
         
-        <div className="h-full">
-          <div className="sticky top-24">
-            <ChartSection
-              selectedExchange={selectedExchange}
-              isLoading={isExchangesLoading}
-              chartType={chartType}
-              onChartTypeChange={setChartType}
-              onOpenModal={() => setIsChartModalOpen(true)}
-            />
-          </div>
+        {/* Chart section with fixed height */}
+        <div className="h-[600px] bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+          <ChartSection
+            selectedExchange={selectedExchange}
+            isLoading={isExchangesLoading}
+            chartType={chartType}
+            onChartTypeChange={setChartType}
+            onOpenModal={() => setIsChartModalOpen(true)}
+          />
         </div>
       </div>
 
-      {selectedExchange && !isExchangesLoading && (
-        <div className="mt-6">
-          <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-            <MetadataDisplay 
-              data={metadata}
-              isLoading={isMetadataLoading}
-              isError={isMetadataError}
-              error={metadataError instanceof Error ? metadataError.message : undefined}
-            />
-          </div>
-        </div>
-      )}
+      {/* Metadata section with min-height */}
+        <div className="min-h-[200px] bg-white dark:bg-gray-800 rounded-lg shadow-sm">
+        {isExchangesLoading ? (
+          <LoadingSpinner />
+        ) : selectedExchange ? (
+          <MetadataDisplay 
+            data={metadata}
+            isLoading={isMetadataLoading}
+            isError={isMetadataError}
+            error={metadataError instanceof Error ? metadataError.message : undefined}
+          />
+        ) : (
+          <NoExchangeSelected message = {"Select an exchange to view metadata"}/>
+        )}
+      </div>
 
       {selectedExchange && (
         <PopupChart
@@ -96,6 +104,6 @@ export const MainContent: React.FC<MainContentProps> = ({
           onChartTypeChange={setChartType}
         />
       )}
-    </main>
+    </div>
   );
 };

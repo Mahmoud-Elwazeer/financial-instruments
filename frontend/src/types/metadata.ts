@@ -1,6 +1,11 @@
 export interface CompanyMetadata {
   _id: string;
   symbol: string;
+  isin: string;
+  exchange: string;
+  currency: string;
+  countryName: string;
+  type: string;
   name: string;
   description: string;
   sector: string;
@@ -36,5 +41,17 @@ export interface CompanyMetadata {
     trailingPe: number;
     forwardPe: number;
     priceBookMrq: number;
+  };
+  exchangeTradedFundDetails: {
+    totalAssets: number;
+    ongoingCharge: string;
+    inceptionDate: string;
+    domicile: string;
+    performance: {
+      '1YVolatility': number;
+      '3YVolatility': number;
+      '3YExpReturn': number;
+      '3YSharpRatio': number
+    };
   };
 }

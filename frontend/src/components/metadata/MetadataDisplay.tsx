@@ -1,7 +1,6 @@
 import React from 'react';
 import { 
-  Building2, Globe, Briefcase, Users, Calendar, Phone, Link2,
-  DollarSign, TrendingUp, BarChart3, PieChart, Activity
+  Building2, Globe, Briefcase, Users, Coins, Phone, Link2, BarChart3, Activity
 } from 'lucide-react';
 import { formatCurrency, formatLargeNumber } from '../../utils/formatters';
 import { CompanyMetadata } from '../../types/metadata';
@@ -9,7 +8,7 @@ import { LoadingSpinner } from '../loadingPage/LoadingSpinner';
 import { MetadataError } from './MetadataError';
 
 interface MetadataDisplayProps {
-  data: CompanyMetadata;
+  data:  Partial<CompanyMetadata>;
   isLoading: boolean;
   isError: boolean;
   error?: string;
@@ -27,9 +26,12 @@ export const MetadataDisplay: React.FC<MetadataDisplayProps> = ({ data, isLoadin
   const {
     name,
     symbol,
+    isin,
+    countryName,
+    type,
+    currency,
     description,
     sector,
-    industry,
     fullTimeEmployees,
     webUrl,
     phone,
@@ -37,6 +39,7 @@ export const MetadataDisplay: React.FC<MetadataDisplayProps> = ({ data, isLoadin
     marketCapitalization,
     highlights,
     technicals,
+    exchangeTradedFundDetails,
   } = data;
 
   return (
@@ -55,6 +58,9 @@ export const MetadataDisplay: React.FC<MetadataDisplayProps> = ({ data, isLoadin
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{name}</h1>
               <span className="text-sm text-gray-500 dark:text-gray-400">({symbol})</span>
+              {isin && (
+                <span className="text-sm text-gray-500 dark:text-gray-400">({isin})</span>
+              )}
             </div>
             <div className="mt-2 flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-300">
               <div className="flex items-center gap-1">
@@ -62,16 +68,20 @@ export const MetadataDisplay: React.FC<MetadataDisplayProps> = ({ data, isLoadin
                 {sector}
               </div>
               <div className="flex items-center gap-1">
+                <Coins className="h-4 w-4" />
+                {currency}
+            </div>
+              <div className="flex items-center gap-1">
                 <Briefcase className="h-4 w-4" />
-                {industry}
+                {type}
               </div>
               <div className="flex items-center gap-1">
                 <Users className="h-4 w-4" />
-                {formatLargeNumber(fullTimeEmployees)} employees
+                {formatLargeNumber(fullTimeEmployees ?? 0)} employees
               </div>
               <div className="flex items-center gap-1">
                 <Globe className="h-4 w-4" />
-                {addressDetails?.country}
+                {countryName}
               </div>
             </div>
             <p className="mt-4 text-sm text-gray-600 dark:text-gray-300 line-clamp-3">
@@ -83,7 +93,8 @@ export const MetadataDisplay: React.FC<MetadataDisplayProps> = ({ data, isLoadin
 
       {/* Key Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Market Stats */}
+
+          {/* Market Stats */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
           <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
             <BarChart3 className="h-5 w-5 text-primary-500 dark:text-primary-400" />
@@ -92,7 +103,7 @@ export const MetadataDisplay: React.FC<MetadataDisplayProps> = ({ data, isLoadin
           <div className="space-y-4">
             <MetricItem
               label="Market Cap"
-              value={formatCurrency(marketCapitalization?.value)}
+              value={formatCurrency(marketCapitalization?.value ?? 0)}
             />
             <MetricItem
               label="P/E Ratio"
@@ -169,6 +180,43 @@ export const MetadataDisplay: React.FC<MetadataDisplayProps> = ({ data, isLoadin
             </div>
           </div>
         </div>
+
+        {/* Fund Information */}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
+            <BarChart3 className="h-5 w-5 text-primary-500 dark:text-primary-400" />
+            Fund Information
+          </h2>
+          <div className="space-y-4">
+            <MetricItem label="Total Assets" value={exchangeTradedFundDetails?.totalAssets? formatLargeNumber(exchangeTradedFundDetails?.totalAssets): 'N/A'}
+            />
+            <MetricItem label="Ongoing Charge" value={exchangeTradedFundDetails?.ongoingCharge?`${parseFloat(exchangeTradedFundDetails.ongoingCharge).toFixed(2)}`: 'N/A' }
+            />
+            <MetricItem label="Inception Date" value={exchangeTradedFundDetails?.inceptionDate}
+            />
+            <MetricItem label="Domicile" value={exchangeTradedFundDetails?.domicile}
+            />
+          </div>
+        </div>
+
+        {/* Risk Metrics*/}
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
+          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
+            <BarChart3 className="h-5 w-5 text-primary-500 dark:text-primary-400" />
+            Risk Metrics
+          </h2>
+          <div className="space-y-4">
+            <MetricItem label="1Y Volatility" value={exchangeTradedFundDetails?.performance['1YVolatility'] ? `${exchangeTradedFundDetails?.performance['1YVolatility']} %` : 'N/A' }
+            />
+            <MetricItem label="3Y Volatility" value={exchangeTradedFundDetails?.performance['1YVolatility'] ? `${exchangeTradedFundDetails?.performance['3YVolatility']} %` : 'N/A' }
+            />
+            <MetricItem label="3Y Exp Return" value={exchangeTradedFundDetails?.performance['1YVolatility'] ? `${exchangeTradedFundDetails?.performance['3YExpReturn']} %` : 'N/A' }
+            />
+            <MetricItem label="3Y Sharp Ratio" value={exchangeTradedFundDetails?.performance['1YVolatility'] ? `${exchangeTradedFundDetails?.performance['3YSharpRatio']} %` : 'N/A' }
+            />
+          </div>
+        </div>
+
       </div>
     </div>
   );
@@ -181,6 +229,7 @@ interface MetricItemProps {
 
 const MetricItem: React.FC<MetricItemProps> = ({ label, value }) => {
   if (!value) return null;
+  if (value === 'N/A') return null;
   
   return (
     <div>

@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { getCandles, getMetadata } from '../services/api';
+import { useState } from 'react';
 import { Exchange } from '../types/exchange';
 import { MainContent } from '../components/layout/MainContent';
 import { LoadingSpinner } from '../components/loadingPage/LoadingSpinner';
-import { ErrorMessage } from '../components/ErrorMessage/ErrorMessage';
 import { useFavorites } from '../hooks/useFavorites';
 
 export function FavoritesPage() {
@@ -12,32 +9,6 @@ export function FavoritesPage() {
   const { favorites, favoriteSymbols, isLoading: isFavoritesLoading } = useFavorites();
 
   const exchanges = favorites.map(item => item.exchange);
-
-  const { 
-    data: candles = [], 
-    isLoading: isCandlesLoading,
-    isError: isCandlesError,
-  } = useQuery({
-    queryKey: ['candles', selectedExchange?.symbol],
-    queryFn: () =>
-      selectedExchange
-        ? getCandles(selectedExchange.symbol)
-        : Promise.resolve([]),
-    enabled: !!selectedExchange,
-  });
-
-  const { 
-    data: metadata = {}, 
-    isLoading: isMetadataLoading,
-    isError: isMetadataError,
-  } = useQuery({
-    queryKey: ['metadata', selectedExchange?.symbol],
-    queryFn: () =>
-      selectedExchange
-        ? getMetadata(selectedExchange.symbol)
-        : Promise.resolve({}),
-    enabled: !!selectedExchange,
-  });
 
   if (isFavoritesLoading) {
     return (
@@ -70,14 +41,9 @@ export function FavoritesPage() {
       <MainContent
         selectedExchange={selectedExchange}
         exchanges={exchanges}
-        candles={candles}
-        metadata={metadata}
         onExchangeSelect={setSelectedExchange}
         isExchangesLoading={isFavoritesLoading}
-        isCandlesLoading={isCandlesLoading}
-        isMetadataLoading={isMetadataLoading}
-        isCandlesError={isCandlesError}
-        isMetadataError={isMetadataError}
+        isExchangesError={false}
         favorites={favoriteSymbols}
       />
     </div>

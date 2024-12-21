@@ -1,7 +1,7 @@
-import { api } from './config';
+import { api, handleApiError } from './config';
 import { Favorite } from '../../types/favorite';
-import { ApiResponse } from '../../types/api';
 import { Exchange } from '../../types/exchange';
+import { ApiFavorites, ApiFavorite, PaginatedResponse } from '../../types/api/responses';
 
 export interface FavoriteWithExchange extends Favorite {
   exchange: Exchange;
@@ -9,30 +9,26 @@ export interface FavoriteWithExchange extends Favorite {
 
 export const getFavorites = async (): Promise<FavoriteWithExchange[]> => {
   try {
-    const { data } = await api.get<ApiResponse<{ favorites: FavoriteWithExchange[] }>>('/favorites');
+    const { data } = await api.get<ApiFavorites<PaginatedResponse<FavoriteWithExchange>>>('/favorites');
     return data.favorites.data;
   } catch (error) {
-    console.error('Error getting favorites:', error);
-    return [];
+    throw handleApiError(error);
   }
 };
 
-export const addFavorite = async (symbol: string): Promise<FavoriteWithExchange | null> => {
+export const addFavorite = async (symbol: string): Promise<FavoriteWithExchange> => {
   try {
-    const { data } = await api.post<ApiResponse<{ favorite: FavoriteWithExchange }>>('/favorites', { symbol });
+    const { data } = await api.post<ApiFavorite<FavoriteWithExchange>>('/favorites', { symbol });
     return data.favorite;
   } catch (error) {
-    console.error('Error adding favorite:', error);
-    return null;
+    throw handleApiError(error);
   }
 };
 
-export const removeFavorite = async (symbol: string): Promise<boolean> => {
+export const removeFavorite = async (symbol: string): Promise<void> => {
   try {
     await api.delete(`/favorites/${symbol}`);
-    return true;
   } catch (error) {
-    console.error('Error removing favorite:', error);
-    return false;
+    throw handleApiError(error);
   }
 };
