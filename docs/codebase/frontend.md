@@ -83,7 +83,7 @@ The directory structure is organized to promote separation of concerns and modul
 │       ├── index.ts                # General API functions (e.g., error handling).
 │       └── metadata.ts             # API functions for fetching metadata.
 ├── types                           # TypeScript type definitions.
-│   ├── api.ts                      # Types for API responses.
+│   ├── api                         # Types for API responses.
 │   ├── candle.ts                   # Types for candle data.
 │   ├── exchange.ts                 # Types for exchange data.
 │   ├── favorite.ts                 # Types for favorite exchanges.
