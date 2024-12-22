@@ -17,7 +17,7 @@ interface MetadataDisplayProps {
 export const MetadataDisplay: React.FC<MetadataDisplayProps> = ({ data, isLoading, isError, error  }) => {
   if (isLoading) {
     return (
-      <div className="h-[600px]">
+      <div className="min-h-[600px] flex items-center justify-center">
         <LoadingSpinner />
       </div>
     );
@@ -25,7 +25,7 @@ export const MetadataDisplay: React.FC<MetadataDisplayProps> = ({ data, isLoadin
 
   if (isError || !data) {
     return (
-      <div className="h-[600px]">
+      <div className="min-h-[600px]">
         <MetadataError message={error || "Not Found Metadata"} />
       </div>
     );
