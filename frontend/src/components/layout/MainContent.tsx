@@ -81,7 +81,9 @@ export const MainContent: React.FC<MainContentProps> = ({
       {/* Metadata section with min-height */}
         <div className="min-h-[200px] bg-white dark:bg-gray-800 rounded-lg shadow-sm">
         {isExchangesLoading ? (
-          <LoadingSpinner />
+          <div className="h-[200px]">
+            <LoadingSpinner />
+          </div>
         ) : selectedExchange ? (
           <MetadataDisplay 
             data={metadata}

@@ -16,11 +16,19 @@ interface MetadataDisplayProps {
 
 export const MetadataDisplay: React.FC<MetadataDisplayProps> = ({ data, isLoading, isError, error  }) => {
   if (isLoading) {
-    return <LoadingSpinner />;
+    return (
+      <div className="h-[600px]">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (isError || !data) {
-    return <MetadataError message={error || "Not Found Metadata"} />;
+    return (
+      <div className="h-[600px]">
+        <MetadataError message={error || "Not Found Metadata"} />
+      </div>
+    );
   }
 
   const {
@@ -43,17 +51,19 @@ export const MetadataDisplay: React.FC<MetadataDisplayProps> = ({ data, isLoadin
   } = data;
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-[600px] space-y-6">
       {/* Header Section */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-        <div className="flex items-start gap-6">
-          {data.logoURL && (
-            <img 
-              src={data.logoURL} 
-              alt={`${name} logo`}
-              className="w-20 h-20 object-contain bg-white rounded-lg"
-            />
-          )}
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+      <div className="flex items-start gap-6">
+      <div className="w-20 h-20 flex-shrink-0">
+            {data.logoURL && (
+              <img 
+                src={data.logoURL} 
+                alt={`${data.name} logo`}
+                className="w-full h-full object-contain bg-white rounded-lg"
+              />
+            )}
+          </div>
           <div className="flex-1">
             <div className="flex items-center gap-2">
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">{name}</h1>
@@ -93,10 +103,8 @@ export const MetadataDisplay: React.FC<MetadataDisplayProps> = ({ data, isLoadin
 
       {/* Key Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
           {/* Market Stats */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
+          <div className="min-h-[200px] bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
             <BarChart3 className="h-5 w-5 text-primary-500 dark:text-primary-400" />
             Market Statistics
           </h2>
@@ -117,8 +125,7 @@ export const MetadataDisplay: React.FC<MetadataDisplayProps> = ({ data, isLoadin
         </div>
 
         {/* Technical Indicators */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
+        <div className="min-h-[200px] bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
             <Activity className="h-5 w-5 text-primary-500 dark:text-primary-400" />
             Technical Indicators
           </h2>
@@ -139,8 +146,7 @@ export const MetadataDisplay: React.FC<MetadataDisplayProps> = ({ data, isLoadin
         </div>
 
         {/* Contact Information */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+        <div className="min-h-[200px] bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">        <h2 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
             Contact Information
           </h2>
           <div className="space-y-4">
@@ -182,8 +188,7 @@ export const MetadataDisplay: React.FC<MetadataDisplayProps> = ({ data, isLoadin
         </div>
 
         {/* Fund Information */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
+        <div className="min-h-[200px] bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
             <BarChart3 className="h-5 w-5 text-primary-500 dark:text-primary-400" />
             Fund Information
           </h2>
@@ -200,8 +205,7 @@ export const MetadataDisplay: React.FC<MetadataDisplayProps> = ({ data, isLoadin
         </div>
 
         {/* Risk Metrics*/}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
+        <div className="min-h-[200px] bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">
             <BarChart3 className="h-5 w-5 text-primary-500 dark:text-primary-400" />
             Risk Metrics
           </h2>
