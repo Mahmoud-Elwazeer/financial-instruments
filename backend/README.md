@@ -43,6 +43,8 @@ Create a `.env` file in the root directory and configure the following variables
     DB_DATABASE=financial_instruments
     REDIS_HOST=127.0.0.1
     REDIS_PORT=6379
+
+    # Cache Expiry Time in seconds
     ExpiryTimeForCache=3600
     ```
     
