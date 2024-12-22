@@ -12,7 +12,7 @@ export const Footer: React.FC = () => {
               About Financial Exchanges
             </h3>
             <p className="text-gray-600 dark:text-gray-300">
-              Track and analyze financial exchanges worldwide with real-time data, comprehensive analytics, and market insights.
+              Track and analyze financial exchanges,including funds, stocks, etc.. Access detailed information, charts, and insights for informed decision-making.
             </p>
           </div>
 
