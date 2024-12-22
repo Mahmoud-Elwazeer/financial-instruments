@@ -118,10 +118,6 @@ You can configure the following environment variables in the `.env` file:
 | `EXPIRY_TIME_FOR_CACHE` | Expiry time for cache (in seconds) | `3600` |
 | `LOGGING_DRIVER` | Docker logging driver (`json-file`, `none`, etc.) | `json-file` |
 
-## Notes
-
-- Ensure that your frontend is correctly configured to make API requests to the backend at `http://localhost:<BACKEND_PORT>`.
-
 ## Troubleshooting
 
 - **Port Conflicts**: If you encounter port conflicts, check if any other services are using the same ports and update the `.env` file accordingly.

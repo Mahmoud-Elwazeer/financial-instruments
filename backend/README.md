@@ -94,8 +94,8 @@ Run Redis on the specified `REDIS_HOST` and `REDIS_PORT`.
         
         ```bash
         npm install -g pm2
-        pm2 start pm2.config.cjs
         
+        pm2 start pm2.config.cjs
         ```
         
 
